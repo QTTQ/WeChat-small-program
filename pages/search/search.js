@@ -1,19 +1,35 @@
 // pages/search/search.js
+// 获取应用实例
+
+var app = getApp()
+/*
+	接口说明：
+		https://api.douban.com/v2/movie/search?q=搜索内容
+*/
+const API_URL = 'https://api.douban.com/v2/movie/search'
+
 Page({
-  data:{},
-  onLoad:function(options){
-    // 页面初始化 options为页面跳转所带来的参数
+  data:{
+  	loadingHide:true,
+  	movies:[]
   },
-  onReady:function(){
-    // 页面渲染完成
-  },
-  onShow:function(){
-    // 页面显示
-  },
-  onHide:function(){
-    // 页面隐藏
-  },
-  onUnload:function(){
-    // 页面关闭
+  search:function (e){
+  	if (!e.detail.value) return
+  	this.setData({loadingHide:false});
+  	var that = this;
+  	wx.request({
+      url: API_URL + "?q=" + e.detail.value, 
+      data: {},
+      header: {
+          'Content-Type': 'application/text'
+      },
+      success: function(res) {
+      	// console.log(res.data);
+        that.setData({
+        	loadingHide:true,
+        	movies: res.data.subjects
+        });
+      }
+    })
   }
 })
